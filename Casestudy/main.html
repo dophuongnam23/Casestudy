@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Quản lí sinh viên</title>
+    <link rel="stylesheet" type="text/css" href="main.css"/>
+
+</head>
+<script type="text/javascrpit">
+</script>
+<body>
+<div id="wrapper">
+    <div id="banner">
+<!--        <img src="img/banner.png" width="1500" height="200"/>-->
+        <a href="#"><img style="height: 150px; padding-top: 20px" src="img/logo.jpg"></a>
+    </div>
+    <div id="menu">
+        <ul>
+            <li><a href="main.html" title="Thêm Sinh viên">Thêm Sinh viên</a></li>
+            <li><a href="Diem.html" title="Thêm điểm">Thêm điểm</a></li>
+            <li><a href="#" title="Top điểm">Top điểm</a></li>
+            <li><a href="#" title="Thông tin">Thông tin</a></li>
+            <li><a href="#" title="Hướng dẫn">Hướng dẫn</a></li>
+            <li><a href="login.html" title="Đăng xuất">Đăng xuất</a></li>
+        </ul>
+
+    </div>
+    <div id="content">
+        <marquee><h1 style="color: red">Thông tin sinh viên</h1></marquee>
+        <br>
+        <!--        <form action="" style="background: #00bd00">-->
+        <table class="tableadd">
+            <tr>
+                <th><label style="color: red">Mã sinh viên :</label></th>
+                <th><input onblur="KTMASV()" style="height: 35px ; width: 270px" type="text" id="ma"
+                           placeholder=" Nhập Mã sinh viên" onfocus="RsTB('thongbaoMA')">
+                    <p id="thongbaoMA"></p>
+                    <br> <br></th>
+
+            </tr>
+            <tr>
+                <th><label style="color: red">Họ và Tên :</label></th>
+                <th><input onblur="KTHOTEN()" style="height: 35px ; width: 270px" type="text" id="HoTen"
+                           placeholder="Nhập họ và tên" onfocus="RsTB('thongbaoHOTEN')">
+                    <p id="thongbaoHOTEN"></p>
+                    <br> <br></th>
+            </tr>
+            <tr>
+                <th><label style="color: red">CMND :</label></th>
+                <th><input onblur="KTCMND()" style="height: 35px ; width: 270px" type="text" id="CMND"
+                           placeholder="Số CMND và CCCD" onfocus="RsTB('thongbaoCMND')">
+                    <p id="thongbaoCMND"></p>
+                    <br><br></th>
+            </tr>
+            <tr>
+                <th><label style="color: red">Email :</label></th>
+                <th><input style="height: 35px ; width: 270px" type="text" id="Email" placeholder="Examp@email.com"
+                           onfocus="RsTB('thongbaoEMAIL')">
+                    <p id="thongbaoEMAIL"></p>
+                    <br> <br></th>
+            </tr>
+            <tr>
+                <th><label style="color: red">Điện thoại :</label></th>
+                <th><input onblur="KTSDT()" style="height: 35px ; width: 270px" type="text" id="tel"
+                           placeholder="19000000" onfocus="RsTB('thongbaoSDT')">
+                    <p id="thongbaoSDT"></p>
+                    <br> <br></th>
+            </tr>
+            <tr>
+                <th>
+                    <button onclick="Them()" style="background: #4d90fe; width: 130px; height: 30px">Thêm</button>
+                </th>
+                <td>
+                    <button onclick="NhapLai()" style="background: yellow; width: 130px; height: 30px">Nhập lại
+                    </button>
+                </td>
+
+            </tr>
+
+        </table>
+        <p id="thongbaotext"></p>
+        <!--        </form>-->
+    </div>
+    <div id="right">
+        <br> <br>
+        <marquee behavior="" direction=""><h1 style="color: red">Danh sách sinh viên</h1></marquee>
+        <br>
+        <input style="height: 26px" type="text" id="timkiem" placeholder="Tìm kiếm" oninput="TimKiem()">
+        <br>
+        <br>
+        <table class="table" style="border: 2px" id="hienthi1">
+            <thead>
+            <tr>
+                <th>Mã sinh viên</th>
+                <th>Họ và Tên</th>
+                <th>CMND</th>
+                <th>Email</th>
+                <th>Điện thoại</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+    <br>
+    <div id="footer">
+        © Bản quyền thuộc về Đại học Thương mại <br>
+        Cơ sở 1 <br>
+        Địa chỉ: 79 Hồ Tùng Mậu, Cầu Giấy, Hà Nội <br>
+        Điện thoại: (024) 3764 3219 <br>
+        Fax: (024) 37643228 <br>
+        Email: mail@tmu.edu.vn <br>
+        Đang truy cập: 42; Hôm nay: 4,615; Tổng lượt truy cập: 36,682,517
+    </div>
+</div>
+
+<script>
+    var data = [];
+
+    function checkMa(ma) {
+        var list = this.data;
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].ma == ma) {
+                return true;
+            }
+        }
+    }
+
+    // Check chưa nhập thông tin
+    function checkInfo() {
+        var ma = document.getElementById("ma").value;
+        var hoten = document.getElementById("HoTen").value;
+        var cmnd = document.getElementById("CMND").value;
+        var email = document.getElementById("Email").value;
+        var dienthoai = document.getElementById("tel").value;
+
+        if (ma && hoten && cmnd && email && dienthoai) {
+            return true;
+        }else{
+            alert('Vui lòng nhập đầy đủ thông tin trước khi thêm!');
+        }
+    }
+
+    function Them() {
+        var ma = document.getElementById("ma").value;
+        var hoten = document.getElementById("HoTen").value;
+        var cmnd = document.getElementById("CMND").value;
+        var email = document.getElementById("Email").value;
+        var dienthoai = document.getElementById("tel").value;
+
+        // if (checkMa(ma)) {
+        //     alert("Mã sinh viên đã tồn tại, vui lòng nhập mã khác!");
+        //  if (checkInfo()) {
+        //      alert("Vui lòng nhập đầy đủ thông tin !")
+        //
+        //  }
+
+            var item = {
+                ma: ma,
+                hoten: hoten,
+                cmnd: cmnd,
+                email: email,
+                dienthoai: dienthoai
+            };
+            //sua
+
+            let index = data.findIndex((c) => c.ma == item.ma)
+            if (index >= 0) {
+                data.splice(index, 1, item)
+            } else {
+                data.push(item);
+            }
+            hienthi(data);
+            NhapLai();
+        }
+
+
+    function hienthi(array) {
+        // let data = localStorage.getItem("data") ?  JSON.parse(localStorage.getItem("data")) : [] ;
+        // if(data.length === 0){
+        //     document.getElementById("hienthi1").style.display = "block"
+        //     return false;
+        // } else {
+        //     document.getElementById("hienthi1").innerHTML = datas;
+        // }
+        // var data = JSON.parse(localStorage.getItem('data'));
+        // // var jsonString = JSON.stringify(data);
+
+        var json = JSON.stringify(array);
+        console.log(json)
+        localStorage.setItem("data", json);
+
+
+        var data = '<table border="1" cellpadding="5"><tr><th>Mã sinh viên</th><th>Họ và Tên</th><th>CMMD</th><th>Email</th><th>Điện thoại</th><td colspan="2">Action</td></tr>';
+        for (var i = 0; i < array.length; i++) {
+
+            data += "<tr>";
+            data += "<td>" + array[i].ma + "</td>";
+            data += "<td>" + array[i].hoten + "</td>";
+            data += "<td>" + array[i].cmnd + "</td>";
+            data += "<td>" + array[i].email + "</td>";
+            data += "<td>" + array[i].dienthoai + "</td>";
+            data += "<td><button style='background: #4d90fe' onclick='Sua(" + array[i].ma + ")'>Sửa</button>";
+            data += "<td><button style='background: red' onclick='Xoa(" + array[i].ma + ")'>Xóa</button>";
+            data += "</tr>";
+        }
+        data += '</table>';
+
+
+        document.getElementById("hienthi1").innerHTML = data;
+    }
+
+    function NhapLai() {
+        var ma = document.getElementById("ma").value = ""
+        var hoten = document.getElementById("HoTen").value = ""
+        var cmnd = document.getElementById("CMND").value = ""
+        var email = document.getElementById("Email").value = ""
+        var dienthoai = document.getElementById("tel").value = ""
+    }
+
+    function Xoa(x) {
+        var question = confirm("Xác nhận xoá Sinh viên !");
+        if (question) {
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].ma == x) {
+                    data.splice(i, 1)
+                    hienthi(data);
+                }
+            }
+        }
+    }
+
+    function Sua(x) {
+        // let index = data.findIndex((c) => c.ma == item.ma)
+        // if (index >= 0) {
+        //     data.splice(index, 1, item)
+
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].ma == x) {
+                document.getElementById("ma").value = data[i].ma;
+                // document.getElementById("ma").setAttribute('disabled', true);
+                document.getElementById("HoTen").value = data[i].hoten;
+                document.getElementById("CMND").value = data[i].cmnd;
+                document.getElementById("Email").value = data[i].email;
+                document.getElementById("tel").value = data[i].dienthoai;
+            }
+        }
+
+    }
+
+    function TimKiem() {
+        let check = document.getElementById("timkiem").value;
+        let datacheck = data.filter(value => {
+            return value.hoten.toUpperCase().includes(check.toUpperCase())
+        })
+        hienthi(datacheck);
+    }
+
+    function KTMASV() {
+        var kq = true;
+        var ma = document.getElementById("ma").value;
+        var thongbao = document.getElementById("thongbaoMA");
+        if(kiemTraRong(ma))
+        {
+            thongbao.innerHTML = "Mã Sinh viên không được để trống";
+            kq = false;
+        }
+        if (kiemTraSo(parseFloat(ma))) {
+            thongbao.innerHTML = "Mã sinh viên bắt buộc là số";
+            thongbao.style.display = "block";
+            kq = false;
+        } else if (kiemTraSoLuongKyTu(ma, 4, 7) == false) {
+            thongbao.innerHTML = "Mã 4 -> 7 ký tự";
+            thongbao.style.display = "block";
+            kq = false;
+        }
+        return kq;
+
+    }
+
+    function KTHOTEN() {
+        var kq = true;
+        var hoten = document.getElementById("HoTen").value;
+        var thongbao = document.getElementById("thongbaoHOTEN");
+        if(kiemTraRong(hoten))
+        {
+            thongbao.innerHTML = "Họ và Tên Sinh viên không được để trống";
+            kq = false;
+        }
+        else if (kiemTraChu(hoten)) {
+            thongbao.innerHTML = "Họ và tên phải là chữ";
+            thongbao.style.display = "block";
+            kq = false;
+        }
+        return kq;
+    }
+
+    function KTSDT() {
+        var kq = true;
+        var sdt = document.getElementById("tel").value;
+        var thongbao = document.getElementById("thongbaoSDT");
+        if(kiemTraRong(sdt))
+        {
+            thongbao.innerHTML = "Sdt không được để trống";
+            kq = false;
+        }
+        else if (kiemTraSo(parseFloat(sdt))) {
+            thongbao.innerHTML = "Bắt buộc là số";
+            thongbao.style.display = "block";
+            kq = false;
+        } else if (kiemTraSoLuongKyTu(sdt, 10, 11) == false) {
+            thongbao.innerHTML = "Sđt phải từ 10 đến 11 kí tự";
+            thongbao.style.display = "block";
+            kq = false;
+        }
+        return kq;
+    }
+
+    function KTCMND() {
+        var kq = true;
+        var cmnd = document.getElementById("CMND").value;
+        var thongbao = document.getElementById("thongbaoCMND");
+        if(kiemTraRong(cmnd))
+        {
+            thongbao.innerHTML = "CMND không được để trống";
+            kq = false;
+        }
+        if (kiemTraSo(parseFloat(cmnd))) {
+            thongbao.innerHTML = "CMND phải là số";
+            thongbao.style.display = "block";
+            kq = false;
+        } else if (kiemTraSoLuongKyTu(cmnd, 9, 12) == false) {
+            thongbao.innerHTML = "CMND phải từ 9 đến 12 ký tự";
+            thongbao.style.display = "block";
+            kq = false;
+        }
+        return kq;
+    }
+
+    // function kiemTraEmail(giatri,bieuthuc)
+    // {
+    //     return giatri.test(bieuthuc);
+    // }
+    // function KTEMAIL(){
+    //     var kq = true;
+    //     var email = document.getElementById("Email").value;
+    //     var thongbao = document.getElementById("thongbaoEMAIL");
+    //     var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    //     if(kiemTraEmail((filter, email) == false)){
+    //         thongbao.innerHTML = "Email nhập không hợp lệ";
+    //         // thongbao.classList.add('animated','fadeInRight')
+    //         thongbao.style.display = "block";
+    //         kq = false;
+    //     }
+    //     return kq;
+    // }
+    function kiemTraSoLuongKyTu(giatri, tu, den) {
+        if (giatri.length >= tu && giatri.length <= den) {
+            return true;
+        }
+        return false;
+    }
+
+    function kiemTraSo(giatri) {
+        if (isNaN(giatri) == true) {
+            return true;
+        }
+        return false;
+    }
+
+    function kiemTraChu(giatri) {
+        if (isNaN(giatri) == false) {
+            return true;
+        }
+        return false;
+    }
+
+    function RsTB(idtb) {
+        var reset = document.getElementById(idtb);
+        var tb = document.getElementById("thongbaotext");
+        tb.innerHTML = "";
+        reset.innerHTML = "";
+
+    }
+    function kiemTraRong(giatri)
+    {
+        if(giatri==="")
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+</script>
+</body>
+</html>

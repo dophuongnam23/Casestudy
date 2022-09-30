@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Quản lí sinh viên</title>
+    <link rel="stylesheet" type="text/css" href="Diem.css"/>
+
+</head>
+<script type="text/javascrpit">
+</script>
+<body>
+<div id="wrapper">
+    <div id="banner">
+        <img src="img/banner.png" width="1500" height="200"/>
+    </div>
+    <div id="menu">
+        <ul>
+            <li><a href="main.html" title="">Thêm Sinh viên</a></li>
+            <li><a href="Diem.html" title="Thêm điểm">Thêm điểm</a></li>
+            <li><a href="#" title="Top">Top điểm</a></li>
+            <li><a href="#" title="Thông tin">Thông tin</a></li>
+            <li><a href="#" title="Hướng dẫn">Hướng dẫn</a></li>
+            <li><a href="login.html" title="Đăng xuất">Đăng xuất</a></li>
+        </ul>
+
+    </div>
+    <div id="content" style="text-align: center;">
+        <br><br><br><br><br>
+        <h1 style="color: red">Điểm của sinh viên</h1>
+        <h3 style="color: red">Chọn sinh viên : </h3>
+              <select>
+                  <option>Đỗ Phương Nam</option>
+                  <option>Nguyễn Quốc Lâm</option>
+                  <option>Hà Duy Lịch</option>
+
+              </select><br><br>
+            <b><label class="field-label" style="color: black">Điểm Toán :</label></b>
+            <input placeholder="Nhập điểm Toán" type="text" class="field-input" id="toan"
+                   onblur="KiemTraToan();" onfocus="RsTBD('thongbaoToan')">
+            <p id="thongbaoToan"></p> <br>
+           <b> <label style="color: black;">Điểm Lý  :</label></b>
+            <input style="width: 180px" placeholder="Nhập điểm Lý" type="text" id="ly"  onblur="KiemTraLy();"
+                   onfocus="RsTBD('thongbaoLy')">
+            <p id="thongbaoLy"></p> <br>
+            <b><label class="field-label" style="color: black">Điểm Hóa  :</label></b>
+            <input placeholder="Nhập điểm Hoá" type="text" class="field-input" id="hoa"
+                   onblur="KiemTraHoa();" onfocus="RsTBD('thongbaoHoa')">
+            <p id="thongbaoHoa"></p>  <br>
+
+            <button type="button" class="btn btn-success animated fadeInUp"
+                    style="background: #4d90fe; height: 30px; width: 130px" onclick="ThemDiem();">Thêm điểm
+            </button>
+            <button type="button" class="btn btn-info animated fadeInUp"
+                    style="background: yellow;height: 30px; width: 130px" onclick="NhapLai();">Nhập lại
+            </button>
+            <p id="pthongbaodiem"></p>
+    </div>
+            <div id="right">
+                <br><br><br><br>
+                <h1 style="color: red">Bảng điểm của sinh viên</h1>
+                <br>
+                <input style="height: 26px" type="text" id="timkiem" placeholder="Tìm kiếm" oninput="TimKiem()">
+                <br>
+                <br>
+                <table class="table" style="border: 2px" id="hienthi2">
+                    <thead>
+                    <tr>
+                        <th>Mã sinh viên</th>
+                        <th>Họ và Tên</th>
+                        <th>Toán</th>
+                        <th>Lý</th>
+                        <th>Hoá</th>
+                        <th>Điểm TB</th>
+                        <th>Xếp loại</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+
+            <div id="footer">
+                © Bản quyền thuộc về Đại học Thương mại <br>
+                Cơ sở 1 <br>
+                Địa chỉ: 79 Hồ Tùng Mậu, Cầu Giấy, Hà Nội <br>
+                Điện thoại: (024) 3764 3219 <br>
+                Fax: (024) 37643228 <br>
+                Email: mail@tmu.edu.vn <br>
+                Đang truy cập: 42; Hôm nay: 4,615; Tổng lượt truy cập: 36,682,517
+            </div>
+        </div>
+        <script>
+            var diem = [];
+            function checkInfo() {
+                var toan = document.getElementById("toan").value;
+                var ly = document.getElementById("ly").value;
+                var hoa = document.getElementById("hoa").value;
+
+
+                if (toan && ly && hoa) {
+                    return true;
+                } else {
+                    alert("Vui lòng nhập đầy đủ thông tin !")
+                }
+            }
+
+            function ThemDiem() {
+                var toan = +document.getElementById("toan").value;
+                var ly = +document.getElementById("ly").value;
+                var hoa = +document.getElementById("hoa").value;
+                var tb = (toan + ly + hoa )/3;
+                var xeploai;
+                for (let i=0; i<diem.length;i++){
+                if( 8 <= tb <= 10) {
+                    xeploai = "Giỏi";
+                } else if (6.5 <= tb < 8){
+                    xeploai = "Khá";}
+                else if (5 <= tb < 6.5){
+                    xeploai = "Trung bình";
+                } else {
+                    xeploai = "Yếu";
+                }}
+
+                var itemdiem = {
+                    toan: toan,
+                    ly: ly,
+                    hoa: hoa,
+                    tb : tb,
+                    xeploai: xeploai
+                };
+                if(checkInfo()){
+                this.diem.push(itemdiem);
+                    hienthidiem(diem);
+                    NhapLai();
+                }
+            }
+                function hienthidiem(array){
+                        // let data = localStorage.getItem("data") ?  JSON.parse(localStorage.getItem("data")) : [] ;
+                        // if(data.length === 0){
+                        //     document.getElementById("hienthi1").style.display = "block"
+                        //     return false;
+                        // } else {
+                        //     document.getElementById("hienthi1").innerHTML = datas;
+                        // }
+                        // var data = JSON.parse(localStorage.getItem('data'));
+                        // // var jsonString = JSON.stringify(data);
+                        var diem = [];
+                        // var json = data.toJSON;
+                        // localStorage.setItem("data", json);
+
+
+                        var diem = '<table border="1" cellpadding="5"><tr><th>Mã sinh viên</th><th>Họ và Tên</th><th>Toán</th><th>Lý</th><th>Hoá</th><th>Điểm TB</th><th>Xếp loại</th><th>Action</th></tr>';
+                        for (var i = 0; i < array.length; i++) {
+
+                            diem += "<tr>";
+                            diem += "<td>" + array[i].ma + "</td>";
+                            diem += "<td>" + array[i].hoten + "</td>";
+                            diem += "<td>" + array[i].toan + "</td>";
+                            diem += "<td>" + array[i].ly + "</td>";
+                            diem += "<td>" + array[i].hoa + "</td>";
+                            diem += "<td>" + array[i].tb + "</td>";
+                            diem += "<td>" + array[i].xeploai + "</td>";
+                            diem += "<td><button style='background: #4d90fe' onclick='Suadiem()'>Sửa</button>";
+                            diem += "</tr>";
+                        }
+                        diem += '</table>';
+
+
+                        document.getElementById("hienthi2").innerHTML = diem;
+
+                }
+
+
+            function NhapLai() {
+                var toan = document.getElementById("toan").value = ""
+                var li = document.getElementById("ly").value = ""
+                var hoa = document.getElementById("hoa").value = ""
+
+            }
+
+            function KiemTraToan() {
+                var kq = true;
+                var thongbaoToan = document.getElementById("thongbaoToan");
+                var toan = document.getElementById('toan').value;
+                if (isNaN(toan) || isNaN(parseFloat(toan))) {
+                    thongbaoToan.innerHTML = "Mời bạn nhập điểm Toán là số";
+                    thongbaoToan.style.display = "block";
+                    kq = false;
+                }
+                if (parseFloat(toan) > 10 || parseFloat(toan) < 0) {
+                    thongbaoToan.innerHTML = "Vui lòng nhập Điểm Toán từ 0-10 điểm";
+                    thongbaoToan.style.display = "block";
+                    kq = false;
+                }
+                return kq;
+            }
+
+            function KiemTraLy() {
+                var kq = true;
+                var thongbaoLy = document.getElementById("thongbaoLy");
+                var ly = document.getElementById('ly').value;
+                if (isNaN(ly) || isNaN(parseFloat(ly))) {
+                    thongbaoLy.innerHTML = "Mời bạn nhập điểm Lý là số";
+                    thongbaoLy.style.display = "block";
+                    kq = false;
+                }
+                if (parseFloat(ly) > 10 || parseFloat(ly) < 0) {
+                    thongbaoLy.innerHTML = "Vui lòng nhập Điểm Lý từ 0-10 điểm";
+                    thongbaoLy.style.display = "block";
+                    kq = false;
+                }
+                return kq;
+            }
+
+            function KiemTraHoa() {
+                var kq = true;
+                var thongbaoHoa = document.getElementById("thongbaoHoa");
+                var hoa = document.getElementById('hoa').value;
+                if (isNaN(hoa) || isNaN(parseFloat(hoa))) {
+                    thongbaoHoa.innerHTML = "Mời bạn nhập điểm Hóa là số";
+                    thongbaoHoa.style.display = "block";
+                    kq = false;
+                }
+                if (parseFloat(hoa) > 10 || parseFloat(hoa) < 0) {
+                    thongbaoHoa.innerHTML = "Vui lòng nhập Điểm Hóa từ 0-10 điểm";
+                    thongbaoHoa.style.display = "block";
+                    kq = false;
+                }
+                return kq;
+            }
+
+            function RsTBD(idtbd) {
+                var reset = document.getElementById(idtbd);
+                var tb = document.getElementById('pthongbaodiem');
+                tb.innerHTML = "";
+                reset.innerHTML = "";
+
+            }
+            function Suadiem(){
+                for (let i = 0; i < diem.length; i++) {
+                    if (diem[i].ma == x) {
+                        document.getElementById("ma").value = data[i].ma;
+                        // document.getElementById("ma").setAttribute('disabled', true);
+                        document.getElementById("HoTen").value = data[i].hoten;
+                        document.getElementById("CMND").value = data[i].cmnd;
+                        document.getElementById("Email").value = data[i].email;
+                        document.getElementById("tel").value = data[i].dienthoai;
+                    }
+                }
+            }
+
+
+
+        </script>
+ </body>
+</html>

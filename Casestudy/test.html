@@ -1,0 +1,291 @@
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>GokiSoft - [Video] Quản lý sinh viên bằng Javascript &amp; LocalStorage &amp; JSON trong JS</title>
+<meta name="description" content="[Video] Quản lý sinh viên bằng Javascript &amp; LocalStorage &amp; JSON trong JS">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="all,follow">
+
+<meta property="og:url" content="http://gokisoft.com/video-quan-ly-sinh-vien-bang-javascript--localstorage--json-trong-js/demo/index.html?fbclid=IwAR3WcgC6lL2BHdk1rpD6MfKdZ-C34O5jQYg35J0Z5iwAgA9ydjOum4wUbBU" />
+<meta property="article:author" content="http://gokisoft.com/video-quan-ly-sinh-vien-bang-javascript--localstorage--json-trong-js/demo/index.html?fbclid=IwAR3WcgC6lL2BHdk1rpD6MfKdZ-C34O5jQYg35J0Z5iwAgA9ydjOum4wUbBU" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="[Video] Quản lý sinh viên bằng Javascript &amp; LocalStorage &amp; JSON trong JS" />
+<meta property="og:description" content="[Video] Quản lý sinh viên bằng Javascript &amp; LocalStorage &amp; JSON trong JS" />
+<meta property="og:image" content="https://gokisoft.com/uploads/stores/49/2021/10/coding-javascript.jpg" />
+<meta property="og:locale" content="vi_VN" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="[Video] Quản lý sinh viên bằng Javascript &amp; LocalStorage &amp; JSON trong JS" />
+<meta name="twitter:image:src" content="https://gokisoft.com/uploads/stores/49/2021/10/coding-javascript.jpg" />
+<meta name="twitter:description" content="[Video] Quản lý sinh viên bằng Javascript &amp; LocalStorage &amp; JSON trong JS" />
+
+<link rel="icon" type="image/png" href="https://gokisoft.com/uploads/2021/03/s-568-ico-web.jpg" />
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quan Ly Sinh Vien</title>
+  <style type="text/css">
+    .container {
+      width: 500px;
+      background-color: #35f0b4;
+      margin: 0px auto;
+      padding: 10px;
+    }
+
+    .form-group, label, input {
+      width: 100%;
+      font-size: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2>NHAP THONG TIN SINH VIEN</h2>
+  <form method="post" onsubmit="return saveData();">
+    <div class="form-group">
+      <label>Tai Khoan</label>
+      <input required type="text" id="username_id" placeholder="Nhap tai khoan">
+    </div>
+    <div class="form-group">
+      <label>Ho & Ten</label>
+      <input  type="text" id="fullname_id" placeholder="Nhap ho & ten">
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input required type="email" id="email_id" placeholder="Nhap email">
+    </div>
+    <div class="form-group">
+      <button type="submit">Luu Thong Tin</button>
+      <button type="reset">Xoa</button>
+      <button type="button" onclick="saveLocalStorage()">Luu Storage</button>
+      <button type="button" onclick="readLocalStorage()">Doc Storage</button>
+    </div>
+  </form>
+</div>
+<div class="container" style="margin-top: 20px">
+  <h2>DANH SACH SINH VIEN</h2>
+  <table border="1" cellpadding="5" style="width: 100%;">
+    <thead>
+    <tr>
+      <th>STT</th>
+      <th>Tai Khoan</th>
+      <th>Ho & Ten</th>
+      <th>Email</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody id="result">
+    </tbody>
+  </table>
+</div>
+<script type="text/javascript">
+  // Tim hieu JSON trong JS
+  // JSON -> string -> cau trung json string -> giong nhu la object | array trong JS
+  // Neu object trong js
+  var std = {
+    "username": "dieptv",
+    "fullname": "Tran Van A",
+    "email": "a@gmail.com"
+  }
+
+  var stdJson = `{
+		"username": "dieptv",
+		"fullname": "Tran Van A",
+		"email": "a@gmail.com"
+	}`;
+
+  var arr = [1, 5, 2, 10]
+  var arrJson = '[1, 5, 2, 10]'
+
+  var stdList = [
+    {
+      "username": "dieptv",
+      "fullname": "Tran Van A",
+      "email": "a@gmail.com"
+    }, {
+      "username": "dieptv",
+      "fullname": "Tran Van A",
+      "email": "a@gmail.com"
+    }, {
+      "username": "dieptv",
+      "fullname": "Tran Van A",
+      "email": "a@gmail.com"
+    }
+  ]
+
+  var stdListJson = `[
+		{
+			"username": "dieptv",
+			"fullname": "Tran Van A",
+			"email": "a@gmail.com"
+		}, {
+			"username": "dieptv",
+			"fullname": "Tran Van A",
+			"email": "a@gmail.com"
+		}, {
+			"username": "dieptv",
+			"fullname": "Tran Van A",
+			"email": "a@gmail.com"
+		}
+	]`
+  var stdListMinifyJson = '[{"username":"dieptv","fullname":"Tran Van A","email":"a@gmail.com"},{"username":"dieptv","fullname":"Tran Van A","email":"a@gmail.com"},{"username":"dieptv","fullname":"Tran Van A","email":"a@gmail.com"}]'
+
+  // Tai sao JSON duoc ung dung trong lap trinh nhieu
+  // Chuyen Object|Array trong js -> json string
+  var json = JSON.stringify(stdList)
+  console.log(json)
+
+  var arr = JSON.parse(stdListJson)
+  console.log(arr)
+
+  function saveLocalStorage() {
+    var username = document.getElementById('username_id').value
+    var fullname = document.getElementById('fullname_id').value
+    var email = document.getElementById('email_id').value
+
+    localStorage.setItem('username', username)
+    localStorage.setItem('fullname', fullname)
+    localStorage.setItem('email', email)
+  }
+
+  function readLocalStorage() {
+    document.getElementById('username_id').value = localStorage.getItem('username')
+    document.getElementById('fullname_id').value = localStorage.getItem('fullname')
+    document.getElementById('email_id').value = localStorage.getItem('email')
+  }
+
+  // Chuong trinh quan ly sinh vien bang JS
+  var resultTag = document.getElementById('result')
+
+  var studentList = []
+
+  function saveData() {
+    var username = document.getElementById('username_id').value
+    var fullname = document.getElementById('fullname_id').value
+    var email = document.getElementById('email_id').value
+
+    var std = {
+      'username': username,
+      'fullname': fullname,
+      'email': email
+    }
+
+    if(cIndex >= 0) {
+      //sua thong tin
+      studentList[cIndex] = std
+      cIndex = -1 //Sau khi sua xong -> lan tiep theo la them moi
+    } else {
+      studentList.push(std)
+    }
+
+    showData()
+
+    return false
+  }
+
+  function showData() {
+    resultTag.innerHTML = ''
+
+    var index = 0
+    for(std of studentList) {
+      resultTag.innerHTML += `<tr>
+				<td>${index + 1}</td>
+				<td>${std.username}</td>
+				<td>${std.fullname}</td>
+				<td>${std.email}</td>
+				<td>
+					<button onclick="editStudent(${index})">Sua</button>
+					<button onclick="removeStudent(${index})">Xoa</button>
+				</td>
+			</tr>`
+      index++
+    }
+  }
+
+  var cIndex = -1
+  function editStudent(index) {
+    cIndex = index
+
+    document.getElementById('username_id').value = studentList[index].username
+    document.getElementById('fullname_id').value = studentList[index].fullname
+    document.getElementById('email_id').value = studentList[index].email
+  }
+
+  function removeStudent(index) {
+    var option = confirm('Ban chac chan muon xoa sinh vien nay khong?')
+    if(!option) return
+
+    studentList.splice(index, 1)
+
+    showData()
+  }
+</script>
+</body>
+</html>
+<script type="text/javascript">
+  var imageList = JSON.parse(`[]`)
+  var imgTags = document.getElementsByTagName('img')
+  for (var i = 0; i < imgTags.length; i++) {
+    arr = imgTags[i].src.split('/')
+    filename = arr[arr.length - 1]
+    newPhoto = imageList[filename]
+    // console.log(imgTags[i].src)
+    if(newPhoto == null || newPhoto == "" || newPhoto == undefined || (!imgTags[i].src.includes('gokisoft.com') && (imgTags[i].src.startsWith('https://') || imgTags[i].src.startsWith('http://')))) {
+      continue;
+    }
+
+    imgTags[i].src = newPhoto
+    // console.log(newPhoto)
+  }
+</script>
+<style type="text/css">
+  .float{
+    position:fixed;
+    width:50px;
+    height:50px;
+    bottom:20px;
+    right:20px;
+    background-color:#0C9;
+    color:#FFF;
+    border-radius:50px;
+    text-align:center;
+    box-shadow: 2px 2px 3px #999;
+  }
+
+  .my-float{
+    margin-top:17px;
+  }
+</style>
+<a href="https://gokisoft.com/video-quan-ly-sinh-vien-bang-javascript--localstorage--json-trong-js.html" title="Bài viết" class="float" style="bottom: 40px; background-color: #17b978 !important;">
+  <img class="my-float" src="https://image.flaticon.com/icons/png/512/481/481675.png" style="width: 15px">
+</a>
+<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5e734e8c2584d40012f1db3e&product=inline-share-buttons' async='async'></script>
+<script type="text/javascript">
+  var gokilite = JSON.parse(`{}`)
+  var user = JSON.parse(`{&quot;fullname&quot;:&quot;Kh\u00e1ch07:06:01 2828\/0909\/22222222&quot;,&quot;avatar&quot;:&quot;https:\/\/res.cloudinary.com\/ziczacgroup\/image\/upload\/v1589552953\/mnzgmfqnags3pbxj6nuh.png&quot;}`)
+
+  //conditions => mang cac dieu kien
+  function saveKeyValue(key, value) {
+    gokilite[key] = value
+
+    saveGokiLite()
+  }
+
+  function getValueByKey(key) {
+    return gokilite[key];
+  }
+
+  function saveGokiLite() {
+    $.post('https://gokisoft.com/gokilite', {
+      'id': 2833,
+      'type': 'post',
+      'content': JSON.stringify(gokilite)
+    }, function(data) {
+    })
+  }
+</script>
